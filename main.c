@@ -5,17 +5,25 @@
  * 
  *  Contact joegasewicz@gmail.com
  **/
+
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
+#include <limits.h>
 
+#define ES_PROJECT_NAME_MAX_LENGTH 100
 #define ES_CMD_HELP "--help"
 #define ES_CMD_SHORT_HELP "-h"
 #define ES_CMD_FLAT "--flat"
 #define ES_CMD_SHORT_FLAT "-f"
 #define ES_CMD_FORM "--form"
 #define ES_ARGS_MAX_LENGTH 2
+#define ES_NPM_ROOT_MAX_LENGTH 300
+#define ES_NPM_ROOT "/electron-scaffolder/project"
+#define ES_EXEC_ROOT_MAX_LENGTH 300
+#define ES_MOVE_CMD_MAX_LENGTH (ES_NPM_ROOT_MAX_LENGTH + ES_EXEC_ROOT_MAX_LENGTH)
+
 
 typedef struct
 {
@@ -26,6 +34,18 @@ typedef struct
     bool is_flat;
     bool is_form;
 } ELECTRON_SCAFFOLDER_obj;
+
+typedef struct main
+{
+    char *exec_path;
+} ES_metadata;
+
+ES_metadata *ES_metadata_create(char *argv[])
+{
+    ES_metadata *md_obj = malloc(sizeof(ES_metadata));
+    return md_obj;
+}
+
 
 ELECTRON_SCAFFOLDER_obj *ELECTRON_SCAFFOLDER_create(char *argv[])
 {
@@ -97,13 +117,44 @@ int main(int argc, char *argv[])
     {
         
     }
-    else
+    else    
     {
+        /* __uninx__ system commands */
         /* Build the project in project name dir */
-        printf("project name ----> %s\n", es_obj->project_name);
+        char npm_es_root[ES_NPM_ROOT_MAX_LENGTH];
+        char exec_root[ES_EXEC_ROOT_MAX_LENGTH];
+        char move_cmd[ES_MOVE_CMD_MAX_LENGTH];
+        char *mkdir_project_name_cmd[ES_PROJECT_NAME_MAX_LENGTH];
+        char *npm_root_cmd = "npm root -g";
+        char *pwd_cmd = "pwd";
+        char *mv_project_cmd = "mv ";
+        char *mkdir_cmd = "mkdir ";
+        char *mv_project_dir_cmd;
+        FILE *fp;
+        FILE *fp2;
 
+        fp = popen(npm_root_cmd, "r");
+        fscanf(fp, "%s", npm_es_root);
+        fp2 = popen(pwd_cmd, "r");
+        fscanf(fp2, "%s", exec_root);
+        // Construct the move command
+        strcat(move_cmd, mv_project_cmd);
+        strcat(move_cmd, npm_es_root);
+        strcat(move_cmd, ES_NPM_ROOT);
+        strcat(move_cmd, " ");
+        strcat(move_cmd, exec_root);
+        if(!es_obj->is_flat)
+        {
+            strcat(move_cmd, "/");
+            strcat(move_cmd, es_obj->project_name);
+            // Make directory
+            strcat(mkdir_cmd, es_obj->project_name);
+            system(mkdir_cmd);
+            system(move_cmd);
+        }
     }
     
     ELECTRON_SCAFFOLDER_clean(es_obj);
     return EXIT_SUCCESS;
 }
+// mv bin /Users/joegasewicz/.nvm/versions/node/v11.15.0/lib/node_modules/electron-scaffolder
