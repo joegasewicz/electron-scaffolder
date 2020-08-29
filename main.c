@@ -29,8 +29,10 @@ void ELECTRON_SCAFFOLDER_help(void)
     printf("\033[0;35m");
     printf("Usage: electron-scaffolder <project_name> [options]\n\n");
     printf("Options:\n");
-    printf("\t-f, --flat\t\tbuild the project in the current directory\n");
-    printf("\t-h, --help\t\toutput usage information\n");
+    printf("\t%s, %s\t\tbuild the project in the current directory\n",
+        ELECTRON_SCAFFOLDER_CMD_HELP, ELECTRON_SCAFFOLDER_CMD__SHORT_HELP);
+    printf("\t%s, %s\t\toutput usage information\n",
+    ELECTRON_SCAFFOLDER_CMD_FLAT, ELECTRON_SCAFFOLDER_CMD_SHORT_FLAT);
     printf("\t  Only <project_name> is requried.\n");
     printf("\033[0m");
 }
