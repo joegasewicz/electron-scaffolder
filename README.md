@@ -18,6 +18,25 @@ cd my_project
 npm run start
 ```
 
+Electron Scaffolder will generate your project for you with the below file structure tree:
+```
+├── README.md
+├── index.html
+├── main.js
+├── package-lock.json
+├── package.json
+├── src
+│   ├── index.tsx
+│   ├── sass
+│   │   └── index.scss
+│   └── views
+│       ├── index.ts
+│       ├── main.styles.tsx
+│       └── main.tsx
+├── tsconfig.json
+└── webpack.config.js
+```
+
 ### List all commands
 ```
 electron-scaffolder --help
