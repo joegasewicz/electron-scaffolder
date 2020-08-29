@@ -2,6 +2,8 @@
 
 Electron with Typescript & React starter generator
 
+![Electron Scaffolder Libraries](./libs.png)
+
 ## Install
 ```
 npm install -g electron-scaffolder
