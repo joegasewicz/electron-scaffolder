@@ -12,7 +12,7 @@
 #include <string.h>
 #include <limits.h>
 
-#define ES_PROJECT_NAME_MAX_LENGTH 100
+#define ES_PROJECT_NAME_MAX_LENGTH 50
 #define ES_CMD_HELP "--help"
 #define ES_CMD_SHORT_HELP "-h"
 #define ES_CMD_FLAT "--flat"
@@ -20,9 +20,9 @@
 #define ES_CMD_FORM "--form"
 #define ES_ARGS_MAX_LENGTH 2
 #define ES_NPM_ROOT_MAX_LENGTH 300
-#define ES_NPM_ROOT "/electron-scaffolder/project"
+#define ES_NPM_ROOT "/electron-scaffolder/project/*"
 #define ES_EXEC_ROOT_MAX_LENGTH 300
-#define ES_MOVE_CMD_MAX_LENGTH (ES_NPM_ROOT_MAX_LENGTH + ES_EXEC_ROOT_MAX_LENGTH)
+#define ES_COPY_CMD_MAX_LENGTH 604
 
 
 typedef struct
@@ -123,13 +123,13 @@ int main(int argc, char *argv[])
         /* Build the project in project name dir */
         char npm_es_root[ES_NPM_ROOT_MAX_LENGTH];
         char exec_root[ES_EXEC_ROOT_MAX_LENGTH];
-        char move_cmd[ES_MOVE_CMD_MAX_LENGTH];
-        char *mkdir_project_name_cmd[ES_PROJECT_NAME_MAX_LENGTH];
+        char copy_cmd[ES_COPY_CMD_MAX_LENGTH];
+        char mkdir_project_name_cmd[ES_PROJECT_NAME_MAX_LENGTH];
         char *npm_root_cmd = "npm root -g";
         char *pwd_cmd = "pwd";
-        char *mv_project_cmd = "mv ";
+        char *cp_project_cmd = "cp -r -v ";
         char *mkdir_cmd = "mkdir ";
-        char *mv_project_dir_cmd;
+        char *cp_project_dir_cmd;
         FILE *fp;
         FILE *fp2;
 
@@ -137,24 +137,35 @@ int main(int argc, char *argv[])
         fscanf(fp, "%s", npm_es_root);
         fp2 = popen(pwd_cmd, "r");
         fscanf(fp2, "%s", exec_root);
-        // Construct the move command
-        strcat(move_cmd, mv_project_cmd);
-        strcat(move_cmd, npm_es_root);
-        strcat(move_cmd, ES_NPM_ROOT);
-        strcat(move_cmd, " ");
-        strcat(move_cmd, exec_root);
+        // Construct the copy command
+        strcat(copy_cmd, cp_project_cmd);
+        strcat(copy_cmd, npm_es_root);
+        strcat(copy_cmd, ES_NPM_ROOT);
+        strcat(copy_cmd, " ");
+        strcat(copy_cmd, exec_root);
         if(!es_obj->is_flat)
         {
-            strcat(move_cmd, "/");
-            strcat(move_cmd, es_obj->project_name);
-            // Make directory
-            strcat(mkdir_cmd, es_obj->project_name);
-            system(mkdir_cmd);
-            system(move_cmd);
+            strcat(copy_cmd, "/");
+            strcat(copy_cmd, es_obj->project_name);
+            strcat(mkdir_project_name_cmd, mkdir_cmd);
+            strcat(mkdir_project_name_cmd, es_obj->project_name);
+            printf("\033[0;34m");
+            printf("Creating project directory %s\n", es_obj->project_name);
+            printf("Executing %s\n", mkdir_project_name_cmd);
+            printf("\033[0m");
+            system(mkdir_project_name_cmd);
+            printf("\033[0;34m");
+            printf("Creating project...\n");
+            printf("\033[0m");
+            system(copy_cmd);
+            printf("\033[0;34m");
+            printf("Successfully created project!\n");
+            printf("\033[0m");
         }
     }
     
     ELECTRON_SCAFFOLDER_clean(es_obj);
     return EXIT_SUCCESS;
 }
-// mv bin /Users/joegasewicz/.nvm/versions/node/v11.15.0/lib/node_modules/electron-scaffolder
+// cp -r -v bin /Users/joegasewicz/.nvm/versions/node/v11.15.0/lib/node_modules/electron-scaffolder
+//  cp -r -v project /Users/joegasewicz/.nvm/versions/node/v11.15.0/lib/node_modules/electron-scaffolder/project
