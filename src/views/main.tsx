@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import {Form, isFieldEmpty,FormConsumer, SubmitButton, TextInputField, PasswordField} from "react-bare-forms";
+import {Form, FormConsumer, SubmitButton, TextInputField, PasswordField} from "react-bare-forms";
 
 import {Wrapper} from "./main.styles";
 
