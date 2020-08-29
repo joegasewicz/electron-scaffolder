@@ -17,3 +17,8 @@ electron-scaffolder my_project
 cd my_project
 npm run start
 ```
+
+### List all commands
+```
+electron-scaffolder --help
+```
