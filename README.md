@@ -1,10 +1,12 @@
 ![Electron Scaffolder](./logo.png)
 
-Electron with Typescript & React starter generator
+Electron Scaffolder is a CLI that generates an Electron starter application & scaffolds a project with Typescript, ReactJS & WebpackJS with enough configuration to get you started on your next exciting Electron project!
 
 ![Electron Scaffolder Libraries](./libs.png)
 
-## Install
+## Getting started
+
+### Install
 ```
 npm install -g electron-scaffolder
 ```
