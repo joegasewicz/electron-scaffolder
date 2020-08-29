@@ -1,6 +1,6 @@
 {
   "name": "electron-scaffolder",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Electron with Typescript & React starter generator",
   "main": "index.js",
   "scripts": {
