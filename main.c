@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#define ELECTRON_SCAFFOLDER_HELP_CMD " --help"
-
-// --help commands
+#define ELECTRON_SCAFFOLDER_CMD_HELP " --help"
+#define ELECTRON_SCAFFOLDER_CMD__SHORT_HELP " -h"
+#define ELECTRON_SCAFFOLDER_CMD_FLAT " --flat"
+#define ELECTRON_SCAFFOLDER_CMD_SHORT_FLAT " -f"
 
 typedef struct
 {
@@ -17,6 +18,11 @@ ELECTRON_SCAFFOLDER_obj *ELECTRON_SCAFFOLDER_create(char *argv[])
     return es_obj;
 }
 
+void ELECTRON_SCAFFOLDER_clean(ELECTRON_SCAFFOLDER_obj *es_obj)
+{
+    free(es_obj);
+}
+
 void ELECTRON_SCAFFOLDER_help(void)
 {
     printf("Help:\n --help\n");
@@ -25,20 +31,13 @@ void ELECTRON_SCAFFOLDER_help(void)
 
 int main(int argc, char *argv[])
 {
-    if(strcmp(argv[1], ELECTRON_SCAFFOLDER_HELP_CMD))
+    if(strcmp(argv[1], ELECTRON_SCAFFOLDER_CMD_HELP))
     {
         ELECTRON_SCAFFOLDER_help();
         return 0;
     }
-    // get path
     ELECTRON_SCAFFOLDER_obj *es_obj = ELECTRON_SCAFFOLDER_create(argv);
+    ELECTRON_SCAFFOLDER_clean(es_obj);
 
-    // add e-scaffolder to .bash_profile
-
-    // get users install path
-
-    // get user args
-    
-    // 
     return 0;
 }
