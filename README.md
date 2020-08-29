@@ -1,2 +1,1 @@
-Electron Scaffolder
-
+Sole Trader Electron Desktop Application

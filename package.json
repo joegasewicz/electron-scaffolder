@@ -1,0 +1,47 @@
+{
+  "name": "sole-trader-desktop",
+  "version": "0.0.1",
+  "description": "Desktop Electron app for Sole Trader",
+  "main": "main.js",
+  "scripts": {
+    "test": "test",
+    "start": "webpack && electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joegasewicz/sole-trader-desktop.git"
+  },
+  "author": "joegasewicz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joegasewicz/sole-trader-desktop/issues"
+  },
+  "homepage": "https://github.com/joegasewicz/sole-trader-desktop#readme",
+  "devDependencies": {
+    "@types/node": "^14.6.0",
+    "@types/react": "^16.9.46",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-is": "^16.7.1",
+    "@types/styled-components": "^5.1.2",
+    "css-loader": "^4.2.1",
+    "electron": "^9.2.1",
+    "electron-devtools-installer": "^3.1.1",
+    "electron-packager": "^15.1.0",
+    "html-webpack-plugin": "^4.3.0",
+    "react-is": "^16.13.1",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.3",
+    "style-loader": "^1.2.1",
+    "ts-loader": "^8.0.2",
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "bootstrap": "^4.5.2",
+    "react": "^16.13.1",
+    "react-bare-forms": "0.0.14",
+    "react-dom": "^16.13.1",
+    "styled-components": "^5.1.1"
+  }
+}
