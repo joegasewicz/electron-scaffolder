@@ -4,6 +4,8 @@ Electron Scaffolder is a CLI that generates an Electron starter application & sc
 
 ![Electron Scaffolder Libraries](./libs.png)
 
+### ⚠️⚠️⚠️ Currently Electron Scaffolder only works with Linux / Mac. We are currently working on Windows compatibility...
+
 ## Getting started
 
 ### Install
