@@ -2,6 +2,6 @@
 
 ## Install
 
-bash```
+```
 npm install -g electron-scaffolder
 ```
