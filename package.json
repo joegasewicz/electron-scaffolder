@@ -1,7 +1,7 @@
 {
-  "name": "sole-trader-desktop",
+  "name": "electron-scaffolder",
   "version": "0.0.1",
-  "description": "Desktop Electron app for Sole Trader",
+  "description": "Electron with Typescript & React starter generator",
   "main": "main.js",
   "scripts": {
     "test": "test",
@@ -43,5 +43,11 @@
     "react-bare-forms": "0.0.14",
     "react-dom": "^16.13.1",
     "styled-components": "^5.1.1"
-  }
+  },
+  "keywords": [
+    "electron",
+    "react",
+    "typescript",
+    "javascript"
+  ]
 }
