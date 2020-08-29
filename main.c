@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#define E_SCAFFOLDER_CMD e-scaff
+
 // --help commands
 
 int main()
@@ -14,5 +16,6 @@ int main()
     // get user args
 
     // 
+    printf("Works......!\n");
     return 0;
 }
