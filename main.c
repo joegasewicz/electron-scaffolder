@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define ES_CMD_HELP "--help"
 #define ES_CMD_SHORT_HELP "-h"
@@ -18,26 +19,37 @@
 
 typedef struct
 {
-    char *args[ES_ARGS_MAX_LENGTH];
+    char *args[ES_ARGS_MAX_LENGTH]; // TODO remove if not used
     int args_length;
     char *project_name;
     char *relative_path;
+    bool is_flat;
+    bool is_form;
 } ELECTRON_SCAFFOLDER_obj;
 
 ELECTRON_SCAFFOLDER_obj *ELECTRON_SCAFFOLDER_create(char *argv[])
 {
     int count = 0;
     ELECTRON_SCAFFOLDER_obj *es_obj = malloc(sizeof(ELECTRON_SCAFFOLDER_obj));
+    char *first_arg = argv[1];
     es_obj->relative_path = argv[0];
-    es_obj->project_name = argv[1];
+    es_obj->project_name = first_arg;
     es_obj->args_length = 0;
     if(argv[2])
     {
         for(int i = 2; i < ES_ARGS_MAX_LENGTH; i++)
         {
-            if(argv[i])
+            if(first_arg)
             {
                 es_obj->args[count] = argv[i];
+                if(strcmp(first_arg, ES_CMD_FLAT) == 0)
+                {
+                    es_obj->is_flat = true;
+                }
+                if(strcmp(first_arg, ES_CMD_FORM) == 0)
+                {
+                    es_obj->is_form = true;
+                }
                 count++;
                 es_obj->args_length = count;
             }
@@ -83,11 +95,12 @@ int main(int argc, char *argv[])
 
     if(es_obj->project_name && es_obj->args_length)
     {
-
+        
     }
     else
     {
         /* Build the project in project name dir */
+        printf("project name ----> %s\n", es_obj->project_name);
 
     }
     
