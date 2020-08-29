@@ -1,6 +1,6 @@
 {
   "name": "electron-scaffolder",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Electron with Typescript & React starter generator",
   "main": "index.js",
   "scripts": {
@@ -17,10 +17,8 @@
     "url": "https://github.com/joegasewicz/sole-trader-desktop/issues"
   },
   "homepage": "https://github.com/joegasewicz/sole-trader-desktop#readme",
-  "devDependencies": {
-  },
-  "dependencies": {
-  },
+  "devDependencies": {},
+  "dependencies": {},
   "keywords": [
     "electron",
     "react",
