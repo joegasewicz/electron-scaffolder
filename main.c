@@ -20,7 +20,11 @@
 #define ES_CMD_FORM "--form"
 #define ES_ARGS_MAX_LENGTH 2
 #define ES_NPM_ROOT_MAX_LENGTH 300
-#define ES_NPM_ROOT "/electron-scaffolder/project/*"
+#if defined(_WIN32) || defined(WIN32)
+    #define ES_NPM_ROOT "\\electron-scaffolder\\project\\*"
+#else
+    #define ES_NPM_ROOT "/electron-scaffolder/project/*"    
+#endif
 #define ES_EXEC_ROOT_MAX_LENGTH 300
 #define ES_COPY_CMD_MAX_LENGTH 604
 
@@ -40,11 +44,11 @@ typedef struct main
     char *exec_path;
 } ES_metadata;
 
-ES_metadata *ES_metadata_create(char *argv[])
-{
-    ES_metadata *md_obj = malloc(sizeof(ES_metadata));
-    return md_obj;
-}
+// ES_metadata *ES_metadata_create(char *argv[])
+// {
+//     ES_metadata *md_obj = malloc(sizeof(ES_metadata));
+//     return md_obj;
+// }
 
 
 ELECTRON_SCAFFOLDER_obj *ELECTRON_SCAFFOLDER_create(char *argv[])
@@ -127,7 +131,11 @@ int main(int argc, char *argv[])
         char mkdir_project_name_cmd[ES_PROJECT_NAME_MAX_LENGTH];
         char *npm_root_cmd = "npm root -g";
         char *pwd_cmd = "pwd";
-        char *cp_project_cmd = "cp -r -v ";
+        #if defined(_WIN32) || defined(WIN32)
+            char *cp_project_cmd = "copy ";
+        #else
+            char *cp_project_cmd = "cp -r -v ";
+        #endif
         char *mkdir_cmd = "mkdir ";
         char *cp_project_dir_cmd;
         FILE *fp;
@@ -145,7 +153,11 @@ int main(int argc, char *argv[])
         strcat(copy_cmd, exec_root);
         if(!es_obj->is_flat)
         {
-            strcat(copy_cmd, "/");
+            #if defined(_WIN32) || defined(WIN32)
+                strcat(copy_cmd, "\\");
+            #else
+                strcat(copy_cmd, "/");
+            #endif
             strcat(copy_cmd, es_obj->project_name);
             strcat(mkdir_project_name_cmd, mkdir_cmd);
             strcat(mkdir_project_name_cmd, es_obj->project_name);
@@ -163,9 +175,6 @@ int main(int argc, char *argv[])
             printf("\033[0m");
         }
     }
-    
     ELECTRON_SCAFFOLDER_clean(es_obj);
     return EXIT_SUCCESS;
 }
-// cp -r -v bin /Users/joegasewicz/.nvm/versions/node/v11.15.0/lib/node_modules/electron-scaffolder
-//  cp -r -v project /Users/joegasewicz/.nvm/versions/node/v11.15.0/lib/node_modules/electron-scaffolder/project
