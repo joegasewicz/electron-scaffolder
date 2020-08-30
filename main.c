@@ -44,18 +44,16 @@ typedef struct main
     char *exec_path;
 } ES_metadata;
 
-// ES_metadata *ES_metadata_create(char *argv[])
-// {
-//     ES_metadata *md_obj = malloc(sizeof(ES_metadata));
-//     return md_obj;
-// }
-
+ES_metadata *ES_metadata_create(char *argv[])
+{
+    ES_metadata *md_obj = malloc(sizeof(ES_metadata));
+    return md_obj;
+}
 
 ELECTRON_SCAFFOLDER_obj *ELECTRON_SCAFFOLDER_create(char *argv[])
 {
     int count = 0;
     ELECTRON_SCAFFOLDER_obj *es_obj = malloc(sizeof(ELECTRON_SCAFFOLDER_obj));
-    // memset(es_obj, 0, sizeof(ELECTRON_SCAFFOLDER_obj));
     char *first_arg = argv[1];
     es_obj->relative_path = argv[0];
     es_obj->project_name = first_arg;
@@ -103,6 +101,18 @@ void ELECTRON_SCAFFOLDER_help(void)
     printf("\033[0m");
 }
 
+void ES_create_project_src(char *npm_es_root)
+{
+    char *npm_root_cmd = "npm root -g";
+    FILE *fp = NULL;
+    fp = popen(npm_root_cmd, "r");
+    fscanf(fp, "%s", npm_es_root);
+}
+
+// void ES_create_project_dest(ELECTRON_SCAFFOLDER_obj *es_obj, )
+// {
+
+// }
 
 int main(int argc, char *argv[])
 {
@@ -119,20 +129,20 @@ int main(int argc, char *argv[])
         return EXIT_SUCCESS;
     }
     ELECTRON_SCAFFOLDER_obj *es_obj = ELECTRON_SCAFFOLDER_create(argv);
+    // ES_metadata *es_meta = ES_metadata_create();
 
     if(es_obj->project_name && es_obj->args_length)
     {
-        
+       
     }
     else    
     {
         /* __uninx__ system commands */
         /* Build the project in project name dir */
-        char npm_es_root[ES_NPM_ROOT_MAX_LENGTH] = { 0 };
+        char *P_npm_es_root = (char *)malloc(ES_NPM_ROOT_MAX_LENGTH * sizeof(char));
         char exec_root[ES_EXEC_ROOT_MAX_LENGTH] = { 0 };
         char copy_cmd[ES_COPY_CMD_MAX_LENGTH] = { 0 };
         char mkdir_project_name_cmd[ES_PROJECT_NAME_MAX_LENGTH] = { 0 };
-        char *npm_root_cmd = "npm root -g";
         char *pwd_cmd = "pwd";
         #if defined(_WIN32) || defined(WIN32)
             char *cp_project_cmd = "copy ";
@@ -144,13 +154,13 @@ int main(int argc, char *argv[])
         FILE *fp = NULL;
         FILE *fp2 = NULL;
 
-        fp = popen(npm_root_cmd, "r");
-        fscanf(fp, "%s", npm_es_root);
+        ES_create_project_src(P_npm_es_root);
+        
         fp2 = popen(pwd_cmd, "r");
         fscanf(fp2, "%s", exec_root);
         // Construct the copy command
         strcat(copy_cmd, cp_project_cmd);
-        strcat(copy_cmd, npm_es_root);
+        strcat(copy_cmd, P_npm_es_root);
         strcat(copy_cmd, ES_NPM_ROOT);
         strcat(copy_cmd, " ");
         strcat(copy_cmd, exec_root);
@@ -176,6 +186,7 @@ int main(int argc, char *argv[])
             printf("\033[0;34m");
             printf("Successfully created project!\n");
             printf("\033[0m");
+            free(P_npm_es_root);
         }
     }
     ELECTRON_SCAFFOLDER_clean(es_obj);
