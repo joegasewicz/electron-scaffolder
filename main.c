@@ -147,7 +147,6 @@ int main(int argc, char *argv[])
     char *P_exec_root = (char *)malloc(ES_EXEC_ROOT_MAX_LENGTH * sizeof(char));
     char copy_cmd[ES_COPY_CMD_MAX_LENGTH] = { 0 };
     char mkdir_project_name_cmd[ES_PROJECT_NAME_MAX_LENGTH] = { 0 };
-    // char *pwd_cmd = "pwd";
     #if defined(_WIN32) || defined(WIN32)
         char *cp_project_cmd = "copy ";
     #else
@@ -194,7 +193,7 @@ int main(int argc, char *argv[])
     // Clean up!
     free(P_npm_es_root);
     free(P_exec_root);
-
     ELECTRON_SCAFFOLDER_clean(es_obj);
+    
     return EXIT_SUCCESS;
 }
