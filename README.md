@@ -4,8 +4,6 @@ Electron Scaffolder is a CLI that generates an Electron starter application & sc
 
 ![Electron Scaffolder Libraries](./libs.png)
 
-⚠️⚠️⚠️ Currently Electron Scaffolder only works on Linux / Mac OS. We are currently working on Windows compatibility...
-
 ## Getting started
 
 ### Install
@@ -43,3 +41,9 @@ Electron Scaffolder will generate your project for you with the below file struc
 ```
 electron-scaffolder --help
 ```
+
+### Create the project in current directory
+```
+electron-scaffolder <your_project> --flat
+```
+The `--flat` argument will create a the project in the current directory
