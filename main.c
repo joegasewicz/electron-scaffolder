@@ -55,10 +55,13 @@ ELECTRON_SCAFFOLDER_obj *ELECTRON_SCAFFOLDER_create(char *argv[])
 {
     int count = 0;
     ELECTRON_SCAFFOLDER_obj *es_obj = malloc(sizeof(ELECTRON_SCAFFOLDER_obj));
+    // memset(es_obj, 0, sizeof(ELECTRON_SCAFFOLDER_obj));
     char *first_arg = argv[1];
     es_obj->relative_path = argv[0];
     es_obj->project_name = first_arg;
     es_obj->args_length = 0;
+    es_obj->is_flat = false;
+    es_obj->is_form = false;
     if(argv[2])
     {
         for(int i = 2; i < ES_ARGS_MAX_LENGTH; i++)
@@ -83,7 +86,7 @@ ELECTRON_SCAFFOLDER_obj *ELECTRON_SCAFFOLDER_create(char *argv[])
 }
 
 void ELECTRON_SCAFFOLDER_clean(ELECTRON_SCAFFOLDER_obj *es_obj)
-{
+{   
     free(es_obj);
 }
 
@@ -125,10 +128,10 @@ int main(int argc, char *argv[])
     {
         /* __uninx__ system commands */
         /* Build the project in project name dir */
-        char npm_es_root[ES_NPM_ROOT_MAX_LENGTH];
-        char exec_root[ES_EXEC_ROOT_MAX_LENGTH];
-        char copy_cmd[ES_COPY_CMD_MAX_LENGTH];
-        char mkdir_project_name_cmd[ES_PROJECT_NAME_MAX_LENGTH];
+        char npm_es_root[ES_NPM_ROOT_MAX_LENGTH] = { 0 };
+        char exec_root[ES_EXEC_ROOT_MAX_LENGTH] = { 0 };
+        char copy_cmd[ES_COPY_CMD_MAX_LENGTH] = { 0 };
+        char mkdir_project_name_cmd[ES_PROJECT_NAME_MAX_LENGTH] = { 0 };
         char *npm_root_cmd = "npm root -g";
         char *pwd_cmd = "pwd";
         #if defined(_WIN32) || defined(WIN32)
@@ -137,9 +140,9 @@ int main(int argc, char *argv[])
             char *cp_project_cmd = "cp -r -v ";
         #endif
         char *mkdir_cmd = "mkdir ";
-        char *cp_project_dir_cmd;
-        FILE *fp;
-        FILE *fp2;
+        char *cp_project_dir_cmd = NULL;
+        FILE *fp = NULL;
+        FILE *fp2 = NULL;
 
         fp = popen(npm_root_cmd, "r");
         fscanf(fp, "%s", npm_es_root);
