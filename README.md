@@ -15,6 +15,7 @@ npm install -g electron-scaffolder
 ```
 electron-scaffolder my_project
 cd my_project
+npm install
 npm run start
 ```
 
