@@ -141,7 +141,6 @@ int main(int argc, char *argv[])
         return EXIT_SUCCESS;
     }
     ELECTRON_SCAFFOLDER_obj *es_obj = ELECTRON_SCAFFOLDER_create(argv);
-    printf("es_obj->is_flat ----> %d", es_obj->is_flat);
     // ES_metadata *es_meta = ES_metadata_create();
     /* Build the project in project name dir */
     char *P_npm_es_root = (char *)malloc(ES_NPM_ROOT_MAX_LENGTH * sizeof(char));
