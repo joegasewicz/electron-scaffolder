@@ -109,10 +109,13 @@ void ES_create_project_src(char *npm_es_root)
     fscanf(fp, "%s", npm_es_root);
 }
 
-// void ES_create_project_dest(ELECTRON_SCAFFOLDER_obj *es_obj, )
-// {
-
-// }
+void ES_create_project_dest(ELECTRON_SCAFFOLDER_obj *es_obj, char *exec_root)
+{
+        char *pwd_cmd = "pwd";
+        FILE *fp = NULL;
+        fp = popen(pwd_cmd, "r");
+        fscanf(fp, "%s", exec_root);
+}
 
 int main(int argc, char *argv[])
 {
@@ -140,10 +143,11 @@ int main(int argc, char *argv[])
         /* __uninx__ system commands */
         /* Build the project in project name dir */
         char *P_npm_es_root = (char *)malloc(ES_NPM_ROOT_MAX_LENGTH * sizeof(char));
-        char exec_root[ES_EXEC_ROOT_MAX_LENGTH] = { 0 };
+        // char exec_root[ES_EXEC_ROOT_MAX_LENGTH] = { 0 };
+        char *P_exec_root = (char *)malloc(ES_EXEC_ROOT_MAX_LENGTH * sizeof(char));
         char copy_cmd[ES_COPY_CMD_MAX_LENGTH] = { 0 };
         char mkdir_project_name_cmd[ES_PROJECT_NAME_MAX_LENGTH] = { 0 };
-        char *pwd_cmd = "pwd";
+        // char *pwd_cmd = "pwd";
         #if defined(_WIN32) || defined(WIN32)
             char *cp_project_cmd = "copy ";
         #else
@@ -151,19 +155,16 @@ int main(int argc, char *argv[])
         #endif
         char *mkdir_cmd = "mkdir ";
         char *cp_project_dir_cmd = NULL;
-        FILE *fp = NULL;
-        FILE *fp2 = NULL;
 
         ES_create_project_src(P_npm_es_root);
-        
-        fp2 = popen(pwd_cmd, "r");
-        fscanf(fp2, "%s", exec_root);
+        ES_create_project_dest(es_obj, P_exec_root);
+
         // Construct the copy command
         strcat(copy_cmd, cp_project_cmd);
         strcat(copy_cmd, P_npm_es_root);
         strcat(copy_cmd, ES_NPM_ROOT);
         strcat(copy_cmd, " ");
-        strcat(copy_cmd, exec_root);
+        strcat(copy_cmd, P_exec_root);
         if(!es_obj->is_flat)
         {
             #if defined(_WIN32) || defined(WIN32)
@@ -186,7 +187,9 @@ int main(int argc, char *argv[])
             printf("\033[0;34m");
             printf("Successfully created project!\n");
             printf("\033[0m");
+            // Clean up!
             free(P_npm_es_root);
+            free(P_exec_root);
         }
     }
     ELECTRON_SCAFFOLDER_clean(es_obj);
