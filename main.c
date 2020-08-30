@@ -27,6 +27,7 @@
 #endif
 #define ES_EXEC_ROOT_MAX_LENGTH 300
 #define ES_COPY_CMD_MAX_LENGTH 604
+#define DEBUG 1
 
 
 typedef struct
@@ -34,14 +35,15 @@ typedef struct
     char *args[ES_ARGS_MAX_LENGTH]; // TODO remove if not used
     int args_length;
     char *project_name;
-    char *relative_path;
     bool is_flat;
     bool is_form;
 } ELECTRON_SCAFFOLDER_obj;
 
 typedef struct main
 {
-    char *exec_path;
+    char *project_src;
+    char *poject_dest;
+
 } ES_metadata;
 
 ES_metadata *ES_metadata_create(char *argv[])
@@ -55,29 +57,26 @@ ELECTRON_SCAFFOLDER_obj *ELECTRON_SCAFFOLDER_create(char *argv[])
     int count = 0;
     ELECTRON_SCAFFOLDER_obj *es_obj = malloc(sizeof(ELECTRON_SCAFFOLDER_obj));
     char *first_arg = argv[1];
-    es_obj->relative_path = argv[0];
+    char *second_arg = argv[2];
     es_obj->project_name = first_arg;
     es_obj->args_length = 0;
     es_obj->is_flat = false;
     es_obj->is_form = false;
-    if(argv[2])
+    if(second_arg)
     {
-        for(int i = 2; i < ES_ARGS_MAX_LENGTH; i++)
+        for(int i = 2; i <= ES_ARGS_MAX_LENGTH; i++)
         {
-            if(first_arg)
+            es_obj->args[count] = argv[i];
+            if(strcmp(argv[i], ES_CMD_FLAT) == 0 || strcmp(argv[i], ES_CMD_SHORT_FLAT) == 0)
             {
-                es_obj->args[count] = argv[i];
-                if(strcmp(first_arg, ES_CMD_FLAT) == 0)
-                {
-                    es_obj->is_flat = true;
-                }
-                if(strcmp(first_arg, ES_CMD_FORM) == 0)
-                {
-                    es_obj->is_form = true;
-                }
-                count++;
-                es_obj->args_length = count;
+                es_obj->is_flat = true;
             }
+            if(strcmp(argv[i], ES_CMD_FORM) == 0)
+            {
+                es_obj->is_form = true;
+            }
+            count++;
+            es_obj->args_length = count;
         }
     }
     return es_obj;
@@ -107,6 +106,11 @@ void ES_create_project_src(char *npm_es_root)
     FILE *fp = NULL;
     fp = popen(npm_root_cmd, "r");
     fscanf(fp, "%s", npm_es_root);
+    #ifdef DEBUG
+        printf("\033[0;33m");
+        printf("DEBUG src root: %s\n", npm_es_root);
+        printf("\033[0m");
+    #endif
 }
 
 void ES_create_project_dest(ELECTRON_SCAFFOLDER_obj *es_obj, char *exec_root)
@@ -115,6 +119,11 @@ void ES_create_project_dest(ELECTRON_SCAFFOLDER_obj *es_obj, char *exec_root)
         FILE *fp = NULL;
         fp = popen(pwd_cmd, "r");
         fscanf(fp, "%s", exec_root);
+        #ifdef DEBUG
+            printf("\033[0;33m");
+            printf("DEBUG exec root: %s\n", exec_root);
+            printf("\033[0m");
+        #endif
 }
 
 int main(int argc, char *argv[])
@@ -132,66 +141,61 @@ int main(int argc, char *argv[])
         return EXIT_SUCCESS;
     }
     ELECTRON_SCAFFOLDER_obj *es_obj = ELECTRON_SCAFFOLDER_create(argv);
+    printf("es_obj->is_flat ----> %d", es_obj->is_flat);
     // ES_metadata *es_meta = ES_metadata_create();
+    /* Build the project in project name dir */
+    char *P_npm_es_root = (char *)malloc(ES_NPM_ROOT_MAX_LENGTH * sizeof(char));
+    char *P_exec_root = (char *)malloc(ES_EXEC_ROOT_MAX_LENGTH * sizeof(char));
+    char copy_cmd[ES_COPY_CMD_MAX_LENGTH] = { 0 };
+    char mkdir_project_name_cmd[ES_PROJECT_NAME_MAX_LENGTH] = { 0 };
+    // char *pwd_cmd = "pwd";
+    #if defined(_WIN32) || defined(WIN32)
+        char *cp_project_cmd = "copy ";
+    #else
+        char *cp_project_cmd = "cp -r -v ";
+    #endif
+    char *mkdir_cmd = "mkdir ";
+    char *cp_project_dir_cmd = NULL;
 
-    if(es_obj->project_name && es_obj->args_length)
+    ES_create_project_src(P_npm_es_root);
+    ES_create_project_dest(es_obj, P_exec_root);
+
+    // Construct the copy command
+    strcat(copy_cmd, cp_project_cmd);
+    strcat(copy_cmd, P_npm_es_root);
+    strcat(copy_cmd, ES_NPM_ROOT);
+    strcat(copy_cmd, " ");
+    strcat(copy_cmd, P_exec_root);
+    #if defined(_WIN32) || defined(WIN32)
+        strcat(copy_cmd, "\\");
+    #else
+        strcat(copy_cmd, "/");
+    #endif
+    if(es_obj->is_flat != true)
     {
-       
+        strcat(copy_cmd, es_obj->project_name);
     }
-    else    
+    strcat(mkdir_project_name_cmd, mkdir_cmd);
+    if(es_obj->is_flat != true)
     {
-        /* __uninx__ system commands */
-        /* Build the project in project name dir */
-        char *P_npm_es_root = (char *)malloc(ES_NPM_ROOT_MAX_LENGTH * sizeof(char));
-        // char exec_root[ES_EXEC_ROOT_MAX_LENGTH] = { 0 };
-        char *P_exec_root = (char *)malloc(ES_EXEC_ROOT_MAX_LENGTH * sizeof(char));
-        char copy_cmd[ES_COPY_CMD_MAX_LENGTH] = { 0 };
-        char mkdir_project_name_cmd[ES_PROJECT_NAME_MAX_LENGTH] = { 0 };
-        // char *pwd_cmd = "pwd";
-        #if defined(_WIN32) || defined(WIN32)
-            char *cp_project_cmd = "copy ";
-        #else
-            char *cp_project_cmd = "cp -r -v ";
-        #endif
-        char *mkdir_cmd = "mkdir ";
-        char *cp_project_dir_cmd = NULL;
-
-        ES_create_project_src(P_npm_es_root);
-        ES_create_project_dest(es_obj, P_exec_root);
-
-        // Construct the copy command
-        strcat(copy_cmd, cp_project_cmd);
-        strcat(copy_cmd, P_npm_es_root);
-        strcat(copy_cmd, ES_NPM_ROOT);
-        strcat(copy_cmd, " ");
-        strcat(copy_cmd, P_exec_root);
-        if(!es_obj->is_flat)
-        {
-            #if defined(_WIN32) || defined(WIN32)
-                strcat(copy_cmd, "\\");
-            #else
-                strcat(copy_cmd, "/");
-            #endif
-            strcat(copy_cmd, es_obj->project_name);
-            strcat(mkdir_project_name_cmd, mkdir_cmd);
-            strcat(mkdir_project_name_cmd, es_obj->project_name);
-            printf("\033[0;34m");
-            printf("Creating project directory %s\n", es_obj->project_name);
-            printf("Executing %s\n", mkdir_project_name_cmd);
-            printf("\033[0m");
-            system(mkdir_project_name_cmd);
-            printf("\033[0;34m");
-            printf("Creating project...\n");
-            printf("\033[0m");
-            system(copy_cmd);
-            printf("\033[0;34m");
-            printf("Successfully created project!\n");
-            printf("\033[0m");
-            // Clean up!
-            free(P_npm_es_root);
-            free(P_exec_root);
-        }
+        strcat(mkdir_project_name_cmd, es_obj->project_name);
+        printf("\033[0;34m");
+        printf("Creating project directory %s\n", es_obj->project_name);
+        printf("Executing %s\n", mkdir_project_name_cmd);
+        printf("\033[0m");
+        system(mkdir_project_name_cmd);
     }
+    printf("\033[0;34m");
+    printf("Creating project...\n");
+    printf("\033[0m");
+    system(copy_cmd);
+    printf("\033[0;34m");
+    printf("Successfully created project!\n");
+    printf("\033[0m");
+    // Clean up!
+    free(P_npm_es_root);
+    free(P_exec_root);
+
     ELECTRON_SCAFFOLDER_clean(es_obj);
     return EXIT_SUCCESS;
 }
