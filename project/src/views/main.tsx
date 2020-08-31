@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import {Form, FormConsumer, SubmitButton, TextInputField, PasswordField} from "react-bare-forms";
+import {Form, FormConsumer, SubmitButton, TextInputField, PasswordField, isFieldEmpty} from "react-bare-forms";
 
 import {Wrapper} from "./main.styles";
 
@@ -24,14 +24,17 @@ export function Main() {
                         state={state}
                         callback={() => console.log("Form submitted ----> ")}>
                         <TextInputField
-                            autoFocus={true}
-                            value={state.email}
-                            name="email"
-                        />
+                            value={state.age}
+                            name="age"
+                            hint="Enter your age"
+                            labelText="Age"
+                            validators={[isFieldEmpty(2)]} />
+
                         <PasswordField
-                            autoFocus={true}
-                            value={state.password}
                             name="password"
+                            value={state.password}
+                            labelText="Password"
+                            validators={[isFieldEmpty(2)]}
                         />
                         <SubmitButton>Submit</SubmitButton>
 
