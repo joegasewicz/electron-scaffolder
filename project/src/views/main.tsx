@@ -8,8 +8,9 @@ import {Wrapper} from "./main.styles";
 
 export function Main() {
     const formState = {
-        email: "test1",
-        password: "test2",
+        email: "",
+        password: "",
+        confirmPassword: "",
     };
     const [state, setState] = useState(formState);
     return (
@@ -22,12 +23,12 @@ export function Main() {
                     <Form
                         context={setState}
                         state={state}
-                        callback={() => console.log("Form submitted ----> ")}>
+                        callback={() => console.log("Form submitted")}>
                         <TextInputField
-                            value={state.age}
-                            name="age"
-                            hint="Enter your age"
-                            labelText="Age"
+                            value={state.email}
+                            name="email"
+                            hint="Enter your email"
+                            labelText="Email"
                             validators={[isFieldEmpty(2)]} />
 
                         <PasswordField
@@ -35,6 +36,13 @@ export function Main() {
                             value={state.password}
                             labelText="Password"
                             validators={[isFieldEmpty(2)]}
+                        />
+
+                        <PasswordField
+                        value={state.confirmPassword}
+                        name="password"
+                        hint="Needs to be at least 8 characters long"
+                        labelText="Password"
                         />
                         <SubmitButton>Submit</SubmitButton>
 

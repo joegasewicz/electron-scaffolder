@@ -40,7 +40,7 @@
   "dependencies": {
     "bootstrap": "^4.5.2",
     "react": "^16.13.1",
-    "react-bare-forms": "0.0.18",
+    "react-bare-forms": "0.0.20",
     "react-dom": "^16.13.1",
     "styled-components": "^5.1.1"
   }
