@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import {Form, FormConsumer, SubmitButton, TextInputField, PasswordField, isFieldEmpty} from "react-bare-forms";
+import {Form, FormConsumer, SubmitButton, TextInputField, PasswordField, isFieldEmpty,areFieldsEqual} from "react-bare-forms";
 
 import {Wrapper} from "./main.styles";
 
@@ -34,15 +34,17 @@ export function Main() {
                         <PasswordField
                             name="password"
                             value={state.password}
+                            hint="Needs to be at least 2 characters long"
                             labelText="Password"
                             validators={[isFieldEmpty(2)]}
                         />
 
                         <PasswordField
                         value={state.confirmPassword}
-                        name="password"
-                        hint="Needs to be at least 8 characters long"
-                        labelText="Password"
+                        name="confirmPassword"
+                        hint="Must be equal to password"
+                        labelText="Confirm password"
+                        validators={[isFieldEmpty(2), areFieldsEqual("password")]}
                         />
                         <SubmitButton>Submit</SubmitButton>
 

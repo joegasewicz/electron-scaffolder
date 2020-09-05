@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "test",
-    "start": "webpack --watch && electron ."
+    "start": "webpack --watch && electron .",
+    "rebuild": "electron-rebuild -f -w sqlite3"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "electron": "^9.2.1",
     "electron-devtools-installer": "^3.1.1",
     "electron-packager": "^15.1.0",
+    "electron-rebuild": "^2.0.1",
     "html-webpack-plugin": "^4.3.0",
     "react-is": "^16.13.1",
     "sass": "^1.26.10",
@@ -42,6 +44,7 @@
     "react": "^16.13.1",
     "react-bare-forms": "0.0.20",
     "react-dom": "^16.13.1",
+    "sqlite3": "^5.0.0",
     "styled-components": "^5.1.1"
   }
 }
