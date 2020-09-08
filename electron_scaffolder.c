@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include "progressbar.h"
 
 #define ES_PROJECT_NAME_MAX_LENGTH 50
 #define ES_CMD_HELP "--help"
@@ -128,6 +129,13 @@ void ES_create_project_dest(ELECTRON_SCAFFOLDER_obj *es_obj, char *exec_root)
 
 int main(int argc, char *argv[])
 {
+    progressbar *progress = progressbar_new("Loading",100);
+for(int i=0; i < 100; i++)
+{
+  // Do some stuff
+  progressbar_inc(progress);
+}
+progressbar_finish(progress);
     if(!argv[1])
     {
         printf("ERROR: Please specify the project directory\n");
